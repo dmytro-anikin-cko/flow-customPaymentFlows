@@ -12,15 +12,27 @@ const totalDisplay = document.getElementById("total-display");
 const discountInput = document.getElementById("discount-code");
 const discountButton = document.getElementById("apply-discount");
 
+
+const loyaltyMessage = document.getElementById("loyalty-message");
+
+function showLoyaltyMessage(text) {
+  loyaltyMessage.textContent = text;
+  loyaltyMessage.classList.remove("hidden");
+}
+
+function hideLoyaltyMessage() {
+  loyaltyMessage.textContent = "";
+  loyaltyMessage.classList.add("hidden");
+}
+
 // Discount Logic
 const applyDiscountAndUpdateTotal = () => {
   discountCode = discountInput.value.trim().toLowerCase();
 
-  const schemeMarkup = selectedMethod === "mastercard" ? 1.02 : 1;
   const isValidDiscount = discountCode === "flow";
   const discountFactor = isValidDiscount ? 0.9 : 1;
 
-  amountOverride = Math.round(amount * schemeMarkup * discountFactor);
+  amountOverride = Math.round(amount * discountFactor);
   const euroAmount = (amountOverride / 100).toFixed(2);
 
   totalDisplay.textContent = `€${euroAmount}`;
@@ -121,8 +133,13 @@ const initFlow = async () => {
       console.log(cardMetadata);
       selectedMethod = cardMetadata?.scheme || null;
 
-      // Adds 2% markup if the scheme is "mastercard"
-      applyDiscountAndUpdateTotal();
+      if (selectedMethod === "mastercard") {
+        showLoyaltyMessage(
+          "🎁 You're using a Mastercard! You’ll earn +50 loyalty points."
+        );
+      } else {
+        hideLoyaltyMessage();
+      }
     },
     onPaymentCompleted: (_self) => {
       payButton.textContent = "Payment Complete ✅";
