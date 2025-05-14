@@ -27,8 +27,8 @@ This project demonstrates how to implement a custom card payment flow using [Che
 1. **❌ No debit cards allowed**  
    Try card number: `4659 1055 6905 1157` → You'll see an error message.
 
-2. **💰 Mastercard markup**  
-   Try card number: `5436 0310 3060 6378` → A 2% markup is applied automatically.
+2. **🎁 Mastercard bonus**  
+   Try card number: `5436 0310 3060 6378` → you’ll see a bonus message — “+50 loyalty points!”.
 
 3. **🏷️ Discount support**  
    Enter the discount code: `flow` → A 10% discount is applied and the Payment Session updates in real time.
