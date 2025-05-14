@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Flow: Custom Payment Flows</title>
+    <!-- Docs: https://tailwindcss.com/docs/installation/play-cdn -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  </head>
+  <body class="bg-gray-50 min-h-screen">
+    <div
+      class="container max-w-5xl mx-auto mt-5 bg-white p-6 rounded-lg shadow-md"
+    >
+      <!-- Loading -->
+      <div id="loader" class="text-center text-gray-600 mb-6">
+        <span class="animate-pulse"
+          >⏳ Your payment session is being loaded...</span
+        >
+      </div>
+
+      <!-- Session ID display -->
+      <div
+        id="session-status"
+        class="hidden text-sm text-gray-500 mb-6 text-center"
+      ></div>
+
+      <!-- Main layout: Flow + Side Panel -->
+      <div class="flex flex-col md:flex-row gap-6">
+        <!-- Flow container -->
+        <div class="flex-1">
+          <div id="flow-container" class="mb-4"></div>
+        </div>
+
+        <!-- Sidebar with Total and Discount -->
+        <div
+          class="w-full md:w-1/3 border rounded p-4 bg-gray-50 flex flex-col justify-between min-h-[300px]"
+        >
+          <div>
+            <div class="mb-4">
+              <label class="block text-sm font-medium text-gray-700"
+                >Total</label
+              >
+              <p id="total-display" class="text-xl font-bold mt-1">€100.00</p>
+            </div>
+
+            <div class="mb-4">
+              <label
+                for="discount-code"
+                class="block text-sm font-medium text-gray-700"
+              >
+                Discount Code
+              </label>
+              <input
+                id="discount-code"
+                type="text"
+                class="mt-1 w-full border rounded px-3 py-2 text-sm"
+                placeholder="Enter 'flow' for 10% off"
+              />
+              <button
+                id="apply-discount"
+                type="button"
+                class="mt-2 w-full bg-slate-400 text-white py-1.5 rounded cursor-pointer disabled:bg-slate-600 disabled:cursor-default"
+              >
+                Apply Discount
+              </button>
+            </div>
+          </div>
+
+          <button
+            id="pay-button"
+            type="button"
+            class="mt-4 w-full bg-blue-600 text-white py-2 rounded cursor-pointer"
+          >
+            Pay
+          </button>
+        </div>
+      </div>
+
+      <!-- Info Section -->
+      <div
+        class="mt-8 bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded text-sm text-gray-800"
+      >
+        <div class="font-semibold mb-2">💡 Functionality Tips:</div>
+        <ul class="list-disc list-inside space-y-1">
+          <li>
+            <strong>No debit cards allowed:</strong> Try inputting
+            <code class="bg-white px-1 rounded">4659105569051157</code> and
+            clicking <strong>Pay</strong> to see the error.
+          </li>
+          <li>
+            <strong>Mastercard surcharge:</strong> If the card scheme is
+            <code class="bg-white px-1 rounded">"mastercard"</code>, a 2% markup
+            is applied — try using
+            <code class="bg-white px-1 rounded">5436031030606378</code>.
+          </li>
+          <li>
+            <strong>10% discount with "flow":</strong> Input
+            <code class="bg-white px-1 rounded">flow</code> in the discount
+            field — the Payment Session amount will be updated on the fly!
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <script src="https://checkout-web-components.checkout.com/index.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
