@@ -3,6 +3,7 @@ let amountOverride;
 const amount = 10000;
 let paymentSession;
 let discountCode = "";
+let checkout;
 
 const flowContainer = document.getElementById("flow-container");
 const sessionStatus = document.getElementById("session-status");
@@ -11,7 +12,6 @@ const payButton = document.getElementById("pay-button");
 const totalDisplay = document.getElementById("total-display");
 const discountInput = document.getElementById("discount-code");
 const discountButton = document.getElementById("apply-discount");
-
 
 const loyaltyMessage = document.getElementById("loyalty-message");
 
@@ -26,7 +26,7 @@ function hideLoyaltyMessage() {
 }
 
 // Discount Logic
-const applyDiscountAndUpdateTotal = () => {
+const applyDiscountAndUpdateTotal = async () => {
   discountCode = discountInput.value.trim().toLowerCase();
 
   const isValidDiscount = discountCode === "flow";
@@ -43,6 +43,13 @@ const applyDiscountAndUpdateTotal = () => {
     discountButton.classList.add("bg-slate-600", "cursor-default");
     discountButton.textContent = "Applied ✅";
     discountInput.disabled = true;
+
+    // Update the payment sheet amount for Apple Pay and Google Pay
+    if (checkout) {
+      await checkout.update({
+        amount: amountOverride,
+      });
+    }
   }
 };
 
@@ -115,7 +122,7 @@ const initFlow = async () => {
     return;
   }
 
-  let checkout = await CheckoutWebComponents({
+  checkout = await CheckoutWebComponents({
     publicKey: "pk_sbox_guri7tp655hvceb3qaglozm7gee",
     paymentSession,
     onError: (_, error) => console.error(error),
@@ -130,12 +137,12 @@ const initFlow = async () => {
       return { continue: true };
     },
     onCardBinChanged: (_self, cardMetadata) => {
-      console.log(cardMetadata);
+      console.log("onCardBinChanged:", cardMetadata);
       selectedMethod = cardMetadata?.scheme || null;
 
       if (selectedMethod === "mastercard") {
         showLoyaltyMessage(
-          "🎁 You're using a Mastercard! You’ll earn +50 loyalty points."
+          "🎁 You're using a Mastercard! You’ll earn +50 loyalty points.",
         );
       } else {
         hideLoyaltyMessage();
@@ -172,6 +179,8 @@ const initFlow = async () => {
   } else {
     console.log("Not Available❌");
   }
+
+
 
   /* Custom PAY button */
 
